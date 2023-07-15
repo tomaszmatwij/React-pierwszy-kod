@@ -9,17 +9,41 @@ const Expenses = props => {
 
 	const dropsDownChangeHandler = selectedYear => {
 		setFilteredYear(selectedYear)
-		console.log(selectedYear);
+		// console.log(selectedYear)
 
-// ustawiamy domyślą wartość useState na 2020 i następnie ustawiamy wartość domyślną w wierszu 17 [selected]
+		// ustawiamy domyślą wartość useState na 2020 i następnie ustawiamy wartość domyślną w wierszu 17 [selected]
+		// filterDate()
 	}
+	// const filterDate =(props) =>{
+	// 	console.log(props.date.getFullYear());
+	// }
+
+	const filtiredEspenses = props.items.filter(expense => {
+		return expense.date.getFullYear().toString() === filteredYear
+	})
+	//funkcja filtrująca, tworząca nową tablicę. filtruje rok wydatku z wybranym rokiem na stronie internetowej, funkcja jest wywoływana w wierszu 29 przy metodzie .map
+
+	let expensesContent = <p> No expenses found</p>
+
+	if (filtiredEspenses.length > 0) {
+		expensesContent = filtiredEspenses.map(expense => (
+			<ExpenseItem
+				key={expense.id} //zawsze nadajemy na tablicę identyfikator key (klucz po id tablcy), aplikacja jest wydajnieszja i nie powoduje blędów
+				title={expense.title}
+				amount={expense.amount}
+				date={expense.date}
+			/>
+		))
+	}
+
+	//warunek który wyświetla nam informacje o braku wydatków, jesli nie ma wydatkó w danym roku.
+
+	
+
 	return (
 		<Card className="expenses">
 			<ExpensesFilter selected={filteredYear} onChangeFilter={dropsDownChangeHandler} />
-			<ExpenseItem title={props.items[0].title} amount={props.items[0].amount} date={props.items[0].date}></ExpenseItem>
-			<ExpenseItem title={props.items[1].title} amount={props.items[1].amount} date={props.items[1].date}></ExpenseItem>
-			<ExpenseItem title={props.items[2].title} amount={props.items[2].amount} date={props.items[2].date}></ExpenseItem>
-			<ExpenseItem title={props.items[3].title} amount={props.items[3].amount} date={props.items[3].date}></ExpenseItem>
+			{expensesContent}
 		</Card>
 	)
 }
